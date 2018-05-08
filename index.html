@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>life</title>
+    <style>
+        body {
+            background: #31B0D5;
+        }
+
+        .total {
+            width: 750px;
+            height: 750px;
+            margin: 0 auto;
+            float: left;
+        }
+
+        .month {
+            width: 25px;
+            height: 25px;
+            box-sizing: border-box;
+            border: 1px solid #D9534F;
+            float: left;
+            background: #F0AD4E;
+        }
+
+        .more {
+            background: #FFF;
+        }
+
+        form {
+            float: left;
+        }
+
+        h4 span {
+            padding: 3px 11px;
+        }
+
+        .yellow {
+            background: #F0AD4E;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="total">
+    </div>
+    <h3>如果你能活到75岁，那么就是900个月。看看你已经度过了多少个月，还剩多少个月。</h3>
+    <h4>
+        <span class="yellow"></span>表示剩余的光辉岁月，
+        <span class="more"></span>表示已经度过的光阴</h4>
+    <h4>这只是一个游戏，不会收录您的任何隐私，你甚至不需要联网就可以使用。</h4>
+    <h4>请选择你的出生日期:</h4>
+    <select name="year" id="year" onchange='addmouth(this.value)'></select> 年
+    <select name="month" id="month" onchange='date(this.value)'></select> 月
+    <select name="day" id="day"></select> 日
+    <button id="calc" onclick="calc()">计算</button>
+    <script>
+        var now = new Date();
+        for (var i = 1970; i <= now.getFullYear(); i++) {
+            year.options.add(new Option(i, i));
+        }
+        for (var i = 1; i <= 12; i++) {
+            month.options.add(new Option(i, i));
+        }
+        var addmouth = function () {
+            if (year.value == now.getFullYear()) {
+                month.innerHTML = "";
+                for (var i = 1; i <= (now.getMonth() + 1); i++) {
+                    month.options.add(new Option(i, i));
+                }
+            } else {
+                for (var i = 1; i <= 12; i++) {
+                    month.options.add(new Option(i, i));
+                }
+            }
+        }
+        var date = function (val) {
+            var days = (year.value % 4 == 0 && year.value % 100 != 0) || year.value % 400 == 0 ? 29 : 28;
+            if ((val < 8 && (val % 2 != 0)) || (val > 7 && (val % 2 == 0))) {
+                for (var i = 1; i <= 31; i++) {
+                    day.options.add(new Option(i, i));
+                }
+            } else if (val != 2) {
+                for (var i = 1; i <= 30; i++) {
+                    day.options.add(new Option(i, i));
+                }
+            } else {
+                for (var i = 1; i <= days; i++) {
+                    day.options.add(new Option(i, i));
+                }
+            }
+            if (year.value == now.getFullYear() && month.value == (now.getMonth() + 1)) {
+                day.innerHTML = "";
+                for (var i = 1; i <= now.getDate(); i++) {
+                    day.options.add(new Option(i, i));
+                }
+            }
+        };
+        date(1);
+        function calc() {
+            var total = document.getElementsByClassName('total')[0];
+            total.innerHTML = "";
+            var birth = new Date(year.value + "-" + month.value + "-" + day.value);
+            var months = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth());
+            for (var i = 1; i <= 900; i++) {
+                var div = document.createElement('div');
+                div.className = i <= months ? 'month more' : 'month';
+                total.appendChild(div);
+            }
+        }
+    </script>
+</body>
+
+</html>
